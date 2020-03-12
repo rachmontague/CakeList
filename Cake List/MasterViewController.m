@@ -73,8 +73,15 @@
                        error:&jsonError];
     if (!jsonError){
         self.objects = responseData;
-        [self.tableView reloadData];
+        if(self.objects.count > 0){
+            [self.tableView reloadData];
+        } else {
+            self.errorLabel.hidden = NO;
+            self.errorLabel.text = @"Ut oh no cakes.";
+        }
     } else {
+        self.errorLabel.hidden = NO;
+        self.errorLabel.text = @"An error occured.";
     }
     
     [self.refreshControl endRefreshing];

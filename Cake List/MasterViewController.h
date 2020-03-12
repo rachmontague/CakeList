@@ -10,6 +10,7 @@
 
 @interface MasterViewController : UITableViewController
 
+@property (strong, nonatomic) IBOutlet UILabel *errorLabel;
 
 @end
 
