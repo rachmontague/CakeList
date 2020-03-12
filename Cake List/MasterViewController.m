@@ -32,15 +32,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CakeCell *cell = (CakeCell*)[tableView dequeueReusableCellWithIdentifier:@"CakeCell"];
     
+    cell.cakeImageView.image = nil;
+    
     NSDictionary *object = self.objects[indexPath.row];
     cell.titleLabel.text = object[@"title"];
     cell.descriptionLabel.text = object[@"desc"];
- 
     
-    NSURL *aURL = [NSURL URLWithString:object[@"image"]];
-    NSData *data = [NSData dataWithContentsOfURL:aURL];
-    UIImage *image = [UIImage imageWithData:data];
-    [cell.cakeImageView setImage:image];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSURL *imageurl = [[NSURL alloc] initWithString:object[@"image"]];
+        NSData *imageData = [[NSData alloc] initWithContentsOfURL:imageurl];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [cell.cakeImageView setImage:[UIImage imageWithData:imageData]];
+        });
+    });
     
     return cell;
 }
