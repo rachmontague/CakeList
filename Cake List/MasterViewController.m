@@ -18,6 +18,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self getData];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self
+                       action:@selector(getData)
+             forControlEvents:UIControlEventValueChanged];
+
+    [self.tableView addSubview:self.refreshControl];
 }
 
 #pragma mark - Table View
@@ -70,6 +77,7 @@
     } else {
     }
     
+    [self.refreshControl endRefreshing];
 }
 
 @end
